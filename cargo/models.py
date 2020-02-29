@@ -7,22 +7,16 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 @login_manager.user_loader
 def load_user(id):
-    return User.query.get(int(id))
+    return Login.query.get(int(id))
 
-class User(db.Model, UserMixin):
-
+class Login(db.Model, UserMixin):
     id=db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80),nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(80))
+    email = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(100),nullable=False)
+    phone = db.Column(db.String(100),nullable=False)
     password = db.Column(db.String(80), nullable=False)
+    image= db.Column(db.String(20), nullable=False, default='default.jpg')
+    usertype = db.Column(db.String(80), nullable=False)
 
-@login_manager.user_loader
-def loaduser(id):
-    return Ship.query.get(int(id))
 
-class Ship(db.Model, UserMixin):
-
-    id=db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80),nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False)
