@@ -19,4 +19,12 @@ class Login(db.Model, UserMixin):
     image= db.Column(db.String(20), nullable=False, default='default.jpg')
     usertype = db.Column(db.String(80), nullable=False)
 
-
+class Shippingdetails(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    ownerid = db.Column(db.String(120))
+    ownername = db.Column(db.String(120))
+    fromplace = db.Column(db.String(120), nullable=False)
+    toplace = db.Column(db.String(100),nullable=False)
+    date = db.Column(db.Date(),nullable=False)
+    time = db.Column(db.Time(), nullable=False)
+    desc= db.Column(db.String(200), nullable=False)

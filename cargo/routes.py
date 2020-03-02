@@ -2,8 +2,8 @@ import os
 from flask import Flask, flash, session
 from flask import render_template, flash, redirect, request, abort, url_for
 from cargo import app, db, bcrypt
-from cargo.models import Login
-from cargo.forms import Shipform
+from cargo.models import Login, Shippingdetails
+from cargo.forms import Shipform , Shipdetailsform, Productaddform
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
@@ -146,6 +146,66 @@ def save_picture(form_picture):
     return picture_fn
 
 
-@app.route('/sdetailsadd')
+@app.route('/sdetailsadd',methods=['GET','POST'])
 def sdetailsadd():
-    return render_template("sdetailsadd.html")
+    form = Shipdetailsform()
+    if form.validate_on_submit():
+        new = Shippingdetails(ownerid = current_user.id,ownername = current_user.username,fromplace = form.fromplace.data,toplace=form.to.data,date=form.date.data,time =form.time.data ,desc =form.desc.data  )
+        db.session.add(new)
+        db.session.commit()
+        return redirect('/sdetailsview')
+    return render_template('sdetailsadd.html', form = form)
+
+
+@app.route('/sdetailsview')
+def sdetailsview():
+    tasks = Shippingdetails.query.filter_by(ownerid=current_user.id).all()
+    return render_template("sdetailsview.html", tasks = tasks)
+
+
+@app.route('/sdetailsdelete/<int:id>')
+def sdetailsdelete(id):
+    delete = Shippingdetails.query.get_or_404(id)
+    try:
+        db.session.delete(delete)
+        db.session.commit()
+        return redirect('/sdetailsview')
+    except:
+        return 'There was an issue deleting your task'
+
+
+@app.route('/sdetailsedit/<int:id>',methods=['GET','POST'])
+def sdetailsedit(id):
+    form = Shipdetailsform()
+    ship = Shippingdetails.query.get_or_404(id)
+    if form.validate_on_submit():
+        ship.fromplace = form.fromplace.data
+        ship.toplace = form.to.data
+        ship.date = form.date.data
+        ship.time = form.time.data
+        ship.desc = form.desc.data
+        db.session.commit() 
+        return redirect('/sdetailsview')
+    elif request.method == 'GET':
+        form.fromplace.data = ship.fromplace
+        form.to.data = ship.toplace
+        form.date.data = ship.date
+        form.time.data = ship.time
+        form.desc.data = ship.desc
+    return render_template('sdetailsedit.html', form = form)
+
+
+@app.route('/udetails')
+def udetails():
+    details = Shippingdetails.query.all()
+    return render_template("udetails.html", details = details)
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect('/')
+
+@app.route('/uproductadd/<int:id>')
+def uproductadd(id):
+    form = Productaddform()
+    return render_template("uproductadd.html", form=form)
