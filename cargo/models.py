@@ -28,3 +28,23 @@ class Shippingdetails(db.Model):
     date = db.Column(db.Date(),nullable=False)
     time = db.Column(db.Time(), nullable=False)
     desc= db.Column(db.String(200), nullable=False)
+
+
+class Productadd(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    ownerid = db.Column(db.String(120))
+    detailsid = db.Column(db.String(120))
+    pdtname = db.Column(db.String(120))
+    weight = db.Column(db.String(120))
+    delname = db.Column(db.String(120))
+    deladdress = db.Column(db.String(120))
+    shipid = db.Column(db.String(120))
+    shipname = db.Column(db.String(120))
+    fromplace = db.Column(db.String(120), nullable=False)
+    toplace = db.Column(db.String(100),nullable=False)
+    date = db.Column(db.Date(),nullable=False)
+    time = db.Column(db.Time(), nullable=False)
+    desc= db.Column(db.String(200), nullable=False)
+    status = db.Column(db.String(200), nullable=False)
+    delstatus = db.Column(db.String(200), nullable=False)
+    productid = db.Column(db.String(200), nullable=False)

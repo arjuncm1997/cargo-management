@@ -47,3 +47,8 @@ class Productaddform(FlaskForm):
     address = StringField('Delivery Address',validators=[DataRequired()])
     
     submit = SubmitField('Submit')
+
+class Delivery(FlaskForm):
+    status = StringField('Delivery Status',validators=[DataRequired()])
+    
+    submit = SubmitField('Submit')

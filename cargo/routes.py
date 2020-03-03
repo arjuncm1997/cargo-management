@@ -2,14 +2,14 @@ import os
 from flask import Flask, flash, session
 from flask import render_template, flash, redirect, request, abort, url_for
 from cargo import app, db, bcrypt
-from cargo.models import Login, Shippingdetails
-from cargo.forms import Shipform , Shipdetailsform, Productaddform
+from cargo.models import Login, Shippingdetails, Productadd
+from cargo.forms import Shipform , Shipdetailsform, Productaddform, Delivery
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 from random import randint
 import random       
-
+import string
 
 @app.route('/')
 def index():
@@ -205,7 +205,113 @@ def logout():
     logout_user()
     return redirect('/')
 
-@app.route('/uproductadd/<int:id>')
+@app.route('/uproductadd/<int:id>',methods=['GET','POST'])
 def uproductadd(id):
     form = Productaddform()
-    return render_template("uproductadd.html", form=form)
+    det = Shippingdetails.query.get_or_404(id)
+    if form.validate_on_submit():
+        new = Productadd(ownerid =current_user.id ,pdtname =form.product.data ,weight = form.weight.data,delname =form.name.data,deladdress =form.address.data ,detailsid = det.id,shipid = det.ownerid,shipname = det.ownername,fromplace = det.fromplace,toplace=det.toplace,date=det.date,time =det.time ,desc =det.desc ,status = '',delstatus='',productid='' )
+        db.session.add(new)
+        db.session.commit()
+        return redirect('/uindex')
+    return render_template('uproductadd.html', form = form)
+
+
+@app.route('/uproductdetails')
+def uproductdetails():
+    details = Productadd.query.filter_by(ownerid=current_user.id).all()
+    return render_template("uproductdetails.html",details = details)
+
+
+@app.route('/uapprovedproducts')
+def uapprovedproducts():
+    details = Productadd.query.filter_by(status='approved', ownerid=current_user.id).all()
+    return render_template("uapprovedproducts.html",details = details)
+
+
+
+
+@app.route('/sproducts',methods=['GET','POST'])
+def sproducts():
+    form =Delivery()
+    details = Productadd.query.filter_by(status='approved',shipid=current_user.id).all()
+    return render_template("sproducts.html",details = details, form=form)
+
+@app.route('/sproductsform/<int:id>',methods=['GET','POST'])
+def sproductsform(id):
+    form =Delivery()
+    details = Productadd.query.get_or_404(id)
+    if form.validate_on_submit():
+        details.delstatus = form.status.data
+        db.session.commit() 
+        return redirect('/sproducts')
+    elif request.method == 'GET':
+        form.status.data = details.delstatus
+    return render_template("sproducts.html", form=form)
+
+
+@app.route('/admin')
+def admin():
+    return render_template("admin.html")
+
+@app.route('/aproducts')
+def aproducts():
+    details = Productadd.query.filter_by(status='').all()
+    return render_template("aproducts.html", details=details)
+
+
+@app.route('/aproductsview/<int:id>')
+def aproductsview(id):
+    details = Productadd.query.get_or_404(id)
+    return render_template("aproductsview.html", details=details)
+
+@app.route('/aproductapprove/<int:id>')
+def aproductapprove(id):
+    details = Productadd.query.get_or_404(id)
+    def randomString(stringLength=5):
+        letters = string.digits
+        return ''.join(random.choice(letters) for i in range(stringLength))
+    number =randomString()
+    details.status='approved'
+    details.productid = number
+    db.session.commit()
+    return redirect('/aproducts')
+
+@app.route('/aproductreject/<int:id>')
+def aproductreject(id):
+    details = Productadd.query.get_or_404(id)
+    details.status='rejected'
+    db.session.commit()
+    return redirect('/aproducts')
+
+@app.route('/aproductsapprove')
+def aproductsapprove():
+    details = Productadd.query.filter_by(status='approved').all()
+    return render_template("aproductsapprove.html", details=details)
+
+@app.route('/aproductstatus')
+def aproductstatus():
+    details = Productadd.query.filter_by(status='approved').all()
+    return render_template("aproductstatus.html", details=details)
+
+@app.route('/aproductsreject')
+def aproductsreject():
+    details = Productadd.query.filter_by(status='rejected').all()
+    return render_template("aproductsreject.html", details=details)
+
+@app.route('/aview/<int:id>')
+def aview(id):
+    details = Productadd.query.get_or_404(id)
+    return render_template("aview.html", details=details)
+
+
+@app.route('/ucheckstatus',methods=['GET','POST'])
+def ucheckstatus():
+    form =Delivery()
+    if form.validate_on_submit():
+        number = form.status.data
+        return redirect('/ustatus/'+str(number))
+
+    return render_template("ucheckstatus.html", form=form)
+
+    
