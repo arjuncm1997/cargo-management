@@ -7,109 +7,19 @@
 			<span>O</span>ur
 			<span>G</span>allery</h3>
 		<div class="row gallery-grids">
+			{% for gallery in gallery %}
 			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
 				<div class="grid">
 					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m1.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m1.jpg" alt=""  class="img-fluid"/>
+						<a class="example-image-link" href="../static/pics/{{gallery.image}}" style="width: 350px; height: 232.97px;" data-lightbox="example-set" data-title="">
+							<img src="../static/pics/{{gallery.image}}" alt="" style="width: 350px; height: 232.97px;" class="img-fluid"/>
 						</a>
 						<figcaption>
 						</figcaption>
 					</figure>
 				</div>
 			</div>
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m8.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m8.jpg" alt="" class="img-fluid" />
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m3.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m3.jpg" alt=""  class="img-fluid"/>
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-		</div>
-		<div class="row gallery-grids">
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m9.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m9.jpg" alt=""  class="img-fluid"/>
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m4.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m4.jpg" alt=""  class="img-fluid" />
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m5.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m5.jpg" alt=""  class="img-fluid" />
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-		</div>
-		<div class="row gallery-grids">
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m6.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m6.jpg" alt=""  class="img-fluid"/>
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m7.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m7.jpg" alt=""  class="img-fluid"/>
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="col-sm-4 gallery-grid wow fadeInUp animated" data-wow-delay=".5s">
-				<div class="grid">
-					<figure class="effect-apollo">
-						<a class="example-image-link" href="../static/images/m2.jpg" data-lightbox="example-set" data-title="">
-							<img src="../static/images/m2.jpg" alt=""  class="img-fluid"/>
-						</a>
-						<figcaption>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </div>

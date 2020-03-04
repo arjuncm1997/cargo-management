@@ -70,6 +70,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     </script>
 </head> 
+<div class="col-md-8">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+		{% for category, message in messages %}
+		  <div class="alert alert-{{ category }}">
+			{{ message }}
+		  </div>
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
+  </div>
 <body>
    <div class="page-container">
    <!--/content-inner-->
@@ -137,6 +148,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                            <div class="menu">
 									<ul id="menu" >
 										<li><a href="/admin"><i class="fa fa-tachometer"></i> <span>Home</span></a></li>
+										<li id="menu-academico" ><a href="#"><i class=""></i> <span> Gallery</span> <span class="fa fa-angle-right" style="float: right"></span></a>
+											<ul id="menu-academico-sub" >
+											<li id="menu-academico-avaliacoes" ><a href="/agalleryadd">Add</a></li>
+											 <li id="menu-academico-boletim" ><a href="/agalleryview">View</a></li>
+										   </ul>
+										 </li>
 										 <li id="menu-academico" ><a href="#"><i class=""></i> <span> Products</span> <span class="fa fa-angle-right" style="float: right"></span></a>
 										   <ul id="menu-academico-sub" >
 										   <li id="menu-academico-avaliacoes" ><a href="/aproducts">View</a></li>
@@ -145,6 +162,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										  </ul>
 										</li>
 										 <li id="menu-academico" ><a href="/aproductstatus"><i class=""></i> <span>Product Status</span></a></li>
+										 <li id="menu-academico" ><a href="#"><i class=""></i> <span> Feedback</span> <span class="fa fa-angle-right" style="float: right"></span></a>
+											<ul id="menu-academico-sub" >
+											<li id="menu-academico-avaliacoes" ><a href="/apubliccontact">Public</a></li>
+											 <li id="menu-academico-avaliacoes" ><a href="/ausercontact">User</a></li>
+											 <li id="menu-academico-boletim" ><a href="/ashipcontact">Ship</a></li>
+										   </ul>
+										 </li>
+										 <li id="menu-academico" ><a href="/auser"><i class=""></i> <span>Users</span></a></li>
+									
+										 <li id="menu-academico" ><a href="/aship"><i class=""></i> <span>Ships</span></a></li>
+									
                                          <li id="menu-academico" ><a href="/logout"><i class=""></i> <span>Logout</span></a></li>
 									
 								  </ul>

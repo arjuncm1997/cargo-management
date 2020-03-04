@@ -9,21 +9,96 @@
             <div class="col-lg-5" style="margin-left: 350px;">
                 <div class="about-right px-lg-4 py-lg-3 p-4">
                     <form action="" method="POST">
+                        {{form.hidden_tag()}}
                         <div class="form-group">
                             <label class="col-form-label">User Name</label>
-                            <input type="text" class="form-control" placeholder=" " name="name" required="">
+                            <div class="form-group">
+                                {% if form.username.errors %}
+                                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.username.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.username(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label">Email</label>
-                            <input type="text" class="form-control" placeholder=" " name="email" required="">
+                            <div class="form-group">
+                                {% if form.email.errors %}
+                                    {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.email(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Address</label>
+                            <div class="form-group">
+                                {% if form.add.errors %}
+                                    {{ form.add(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.add.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.add(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Phone Number</label>
+                            <div class="form-group">
+                                {% if form.phone.errors %}
+                                    {{ form.phone(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.phone.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.phone(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label">Password</label>
-                            <input type="password" class="form-control" placeholder=" " id = "password" name="password" required="">
+                            <div class="form-group">
+                                {% if form.password.errors %}
+                                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.password(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label">Confirm Password</label>
-                            <input type="password" class="form-control" placeholder=" " id="confirm_password" name="email" equalto="" required="">
+                            <div class="form-group">
+                                {% if form.confirm_password.errors %}
+                                    {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.confirm_password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.confirm_password(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
                         </div>
                         
                         <div class="right-w3l">
@@ -39,7 +114,7 @@
 
 
 
-<script>
+<!-- <script>
     var password = document.getElementById("password")
   , confirm_password = document.getElementById("confirm_password");
 
@@ -53,5 +128,6 @@ function validatePassword(){
 
 password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
-</script>
+</script> -->
+
 {% endblock %}

@@ -19,6 +19,13 @@ class Login(db.Model, UserMixin):
     image= db.Column(db.String(20), nullable=False, default='default.jpg')
     usertype = db.Column(db.String(80), nullable=False)
 
+
+
+class Gallery(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    name= db.Column(db.String(200))
+    image = db.Column(db.String(20), nullable=False, default='default.jpg')
+
 class Shippingdetails(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     ownerid = db.Column(db.String(120))
@@ -28,6 +35,14 @@ class Shippingdetails(db.Model):
     date = db.Column(db.Date(),nullable=False)
     time = db.Column(db.Time(), nullable=False)
     desc= db.Column(db.String(200), nullable=False)
+
+class Contact(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(200))
+    email = db.Column(db.String(200))
+    subject = db.Column(db.String(200))
+    message = db.Column(db.String(200))
+    usertype = db.Column(db.String(200))
 
 
 class Productadd(db.Model):

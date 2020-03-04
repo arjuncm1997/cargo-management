@@ -44,7 +44,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<!-- //Web-Fonts -->
 
 </head>
-
+<div class="col-md-8">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+		{% for category, message in messages %}
+		  <div class="alert alert-{{ category }}">
+			{{ message }}
+		  </div>
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
+  </div>
 <body>
 	<!-- header -->
 	<header>
@@ -84,8 +94,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="/uapprovedproducts">Your Products</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="">Other</a>
+							<a class="dropdown-item" href="/ucheckstatus">Other</a>
 						</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/ucontact">Contact</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/logout">Logout</a>
