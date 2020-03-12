@@ -31,7 +31,13 @@ class RegistrationForm(FlaskForm):
         user = Login.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
-
+            
+class LoginForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
 
 class Shipform(FlaskForm):
     name = StringField('Name',
@@ -80,3 +86,9 @@ class Imageadd(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=1, max=40)])
     pic = FileField('Upload Picture', validators=[DataRequired(),FileAllowed(['jpg', 'png','jpeg'])])
     submit = SubmitField('Save')
+
+class Changepassword(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm New Password',
+                                     validators=[ EqualTo('password')])
+    submit = SubmitField('Reset Password')

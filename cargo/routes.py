@@ -3,7 +3,7 @@ from flask import Flask, flash, session
 from flask import render_template, flash, redirect, request, abort, url_for
 from cargo import app, db, bcrypt, mail
 from cargo.models import Login, Shippingdetails, Productadd, Contact, Gallery
-from cargo.forms import Shipform , Shipdetailsform, Productaddform, Delivery, RegistrationForm, Imageadd
+from cargo.forms import Shipform , Shipdetailsform, Productaddform, Delivery, RegistrationForm, Imageadd, Changepassword, LoginForm
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
@@ -148,16 +148,17 @@ def sindex():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        user = Login.query.filter_by(email=request.form['email'], usertype = 'user' ).first()
-        user1 = Login.query.filter_by(email=request.form['email'],  usertype = 'ship').first()
-        user2 = Login.query.filter_by(email=request.form['email'],  usertype = 'admin').first()
-        if user and bcrypt.check_password_hash(user.password,request.form['password']):
-            login_user(user)
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = Login.query.filter_by(email=form.email.data, usertype = 'user' ).first()
+        user1 = Login.query.filter_by(email=form.email.data,  usertype = 'ship').first()
+        user2 = Login.query.filter_by(email=form.email.data,  usertype = 'admin').first()
+        if user and bcrypt.check_password_hash(user.password,form.password.data):
+            login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect('/uindex')
-        if user1 and bcrypt.check_password_hash(user1.password, request.form['password']):
-            login_user(user1)
+        if user1 and bcrypt.check_password_hash(user1.password, form.password.data):
+            login_user(user1, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect('/sindex')
         if user2 and user2.password== form.password.data:
@@ -167,7 +168,7 @@ def login():
 
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login')
+    return render_template('login.html', title='Login', form = form)
 
 @app.route('/userregister',methods=['GET','POST'])
 def userregister():
@@ -381,15 +382,24 @@ def aproductsview(id):
 @login_required
 def aproductapprove(id):
     details = Productadd.query.get_or_404(id)
+    no = details.ownerid
+    log = Login.query.get_or_404(no)
     def randomString(stringLength=5):
         letters = string.digits
         return ''.join(random.choice(letters) for i in range(stringLength))
     number =randomString()
     details.status='approved'
     details.productid = number
+    approvemail(log,number)
     db.session.commit()
-    flash('Product Approved', 'success')
     return redirect('/aproducts')
+
+def approvemail(log,number):
+    msg = Message('Successfull',
+                  recipients=[log.email])
+    msg.body = f''' Product approved number: {number} '''
+    mail.send(msg) 
+
 
 @app.route('/aproductreject/<int:id>')
 @login_required
@@ -473,3 +483,40 @@ def auser():
 def aship():
     ship = Login.query.filter_by(usertype='ship').all()
     return render_template("aship.html", ship=ship)
+
+@app.route('/resetrequest', methods=['GET','POST'])
+def resetrequest():
+    if request.method == 'POST':
+        email=request.form['email']
+        user = Login.query.filter_by(email=email).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'info')
+        return redirect('/login')
+    return render_template('resetrequest.html')
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request',
+                  recipients=[user.email])
+    msg.body = f'''To reset your password, visit the following link:
+{url_for('resettoken', token=token, _external=True)}
+
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+    mail.send(msg)
+
+
+@app.route("/resetpassword/<token>", methods=['GET', 'POST'])
+def resettoken(token):
+    user = Login.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect('/resetrequest')
+    form = Changepassword()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in', 'success')
+        return redirect('/login')
+    return render_template('resetpassword.html', title='Reset Password', form=form)
